@@ -1,4 +1,9 @@
-function barTemplate(data, targetElement) {
+function barTemplate(data, chartmeta, targetElement) {
+
+    // chart meta
+    var title = d3.select(targetElement).append("h1").text(chartmeta.title);
+    var subtitle = d3.select(targetElement).append("div").text(chartmeta.subtitle);
+
 
     var width = d3.select(targetElement).node().getBoundingClientRect().width;
     var height = width * 0.4;
@@ -60,4 +65,9 @@ function barTemplate(data, targetElement) {
     // add the y Axis
     svg.append("g")
         .call(d3.axisLeft(y));
+
+    // chart meta
+    var textsource = d3.select(targetElement).append("div").html('<b>SOURCE:</b> ' + chartmeta.title);
+    var textnote = d3.select(targetElement).append("div").html('<b>NOTE:</b> ' + chartmeta.subtitle);
+
 }

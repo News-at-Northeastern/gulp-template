@@ -1,4 +1,8 @@
-function coalTemplate(data, targetElement) {
+function coalTemplate(data, chartmeta, targetElement) {
+
+    // chart meta
+    var title = d3.select(targetElement).append("h1").text(chartmeta.title);
+    var subtitle = d3.select(targetElement).append("div").text(chartmeta.subtitle);
 
     margin.left = 75;
     var width = d3.select(targetElement).node().getBoundingClientRect().width;
@@ -112,4 +116,7 @@ function coalTemplate(data, targetElement) {
       .style("fill", function(d) { return colorscale(d.polarity); })
       .on('mouseover', tooltip.show)
       .on('mouseout', tooltip.hide);
+      // chart meta
+      var textsource = d3.select(targetElement).append("div").html('<b>SOURCE:</b> ' + chartmeta.title);
+      var textnote = d3.select(targetElement).append("div").html('<b>NOTE:</b> ' + chartmeta.subtitle);
 }

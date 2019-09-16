@@ -7,16 +7,23 @@ var colors = {
     political: ["#D41B2C", "#006EB5"]
 }
 
+var chartmeta = {
+    title: "Chart Title",
+    subtitle: "This is an explanatory line.",
+    source: "Data Source Library",
+    note: "In case we need an extra note."
+}
+
 d3.json('/interactive/2018/10/bubble/data/aggregated.json')
   .then(function(data) {
 
-  barTemplate(data, "#bar");
+  barTemplate(data, chartmeta, "#bar");
 
-  groupedBarTemplate(data, "#groupedbar");
+  groupedBarTemplate(data, chartmeta, "#groupedbar");
 
-  donutTemplate(data, "#donut");
+  donutTemplate(data, chartmeta, "#donut");
 
-  coalTemplate(data, "#coal");
+  coalTemplate(data, chartmeta, "#coal");
 
 }).catch(function(error){
    // handle error

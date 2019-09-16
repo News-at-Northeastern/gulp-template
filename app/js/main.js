@@ -7,22 +7,34 @@ var colors = {
     political: ["#D41B2C", "#006EB5"]
 }
 
+var chartmeta = {
+    title: "Chart Title",
+    subtitle: "This is an explanatory line.",
+    source: "Data Source Library",
+    note: "In case we need an extra note."
+}
+
 d3.json('/interactive/2018/10/bubble/data/aggregated.json')
   .then(function(data) {
 
-  barTemplate(data, "#bar");
+  barTemplate(data, chartmeta, "#bar");
 
-  groupedBarTemplate(data, "#groupedbar");
+  groupedBarTemplate(data, chartmeta, "#groupedbar");
 
-  donutTemplate(data, "#donut");
+  donutTemplate(data, chartmeta, "#donut");
 
-  coalTemplate(data, "#coal");
+  coalTemplate(data, chartmeta, "#coal");
 
 }).catch(function(error){
    // handle error
 });
 
-function barTemplate(data, targetElement) {
+function barTemplate(data, chartmeta, targetElement) {
+
+    // chart meta
+    var title = d3.select(targetElement).append("h1").text(chartmeta.title);
+    var subtitle = d3.select(targetElement).append("div").text(chartmeta.subtitle);
+
 
     var width = d3.select(targetElement).node().getBoundingClientRect().width;
     var height = width * 0.4;
@@ -84,9 +96,18 @@ function barTemplate(data, targetElement) {
     // add the y Axis
     svg.append("g")
         .call(d3.axisLeft(y));
+
+    // chart meta
+    var textsource = d3.select(targetElement).append("div").html('<b>SOURCE:</b> ' + chartmeta.title);
+    var textnote = d3.select(targetElement).append("div").html('<b>NOTE:</b> ' + chartmeta.subtitle);
+
 }
 
-function coalTemplate(data, targetElement) {
+function coalTemplate(data, chartmeta, targetElement) {
+
+    // chart meta
+    var title = d3.select(targetElement).append("h1").text(chartmeta.title);
+    var subtitle = d3.select(targetElement).append("div").text(chartmeta.subtitle);
 
     margin.left = 75;
     var width = d3.select(targetElement).node().getBoundingClientRect().width;
@@ -200,9 +221,16 @@ function coalTemplate(data, targetElement) {
       .style("fill", function(d) { return colorscale(d.polarity); })
       .on('mouseover', tooltip.show)
       .on('mouseout', tooltip.hide);
+      // chart meta
+      var textsource = d3.select(targetElement).append("div").html('<b>SOURCE:</b> ' + chartmeta.title);
+      var textnote = d3.select(targetElement).append("div").html('<b>NOTE:</b> ' + chartmeta.subtitle);
 }
 
-function donutTemplate(data, targetElement) {
+function donutTemplate(data, chartmeta, targetElement) {
+
+    // chart meta
+    var title = d3.select(targetElement).append("h1").text(chartmeta.title);
+    var subtitle = d3.select(targetElement).append("div").text(chartmeta.subtitle);
 
     var width = d3.min([document.documentElement.clientWidth, (d3.select(targetElement).node().getBoundingClientRect().width / 3.1)]);
     var height = width;
@@ -282,9 +310,16 @@ function donutTemplate(data, targetElement) {
     // container.select(".legendOrdinal")
     //   .call(legendOrdinal);
 
+    // chart meta
+    var textsource = d3.select(targetElement).append("div").html('<b>SOURCE:</b> ' + chartmeta.title);
+    var textnote = d3.select(targetElement).append("div").html('<b>NOTE:</b> ' + chartmeta.subtitle);
 }
 
-function groupedBarTemplate(data, targetElement) {
+function groupedBarTemplate(data, chartmeta, targetElement) {
+
+    // chart meta
+    var title = d3.select(targetElement).append("h1").text(chartmeta.title);
+    var subtitle = d3.select(targetElement).append("div").text(chartmeta.subtitle);
 
     var width = d3.select(targetElement).node().getBoundingClientRect().width;
     var height = width * 0.4;
@@ -370,7 +405,6 @@ function groupedBarTemplate(data, targetElement) {
             .on('mouseout', tooltip.hide)
           .selectAll("rect")
           .data(function(d) {
-              console.log(d3.entries(d).filter(function(dd) { return dd.key == "negative" || dd.key == "positive"; }));
               return d3.entries(d).filter(function(dd) { return dd.key == "negative" || dd.key == "positive"; });
           })
           .join("rect")
@@ -389,6 +423,9 @@ function groupedBarTemplate(data, targetElement) {
       svg.append("g")
           .call(d3.axisLeft(y));
 
+          // chart meta
+          var textsource = d3.select(targetElement).append("div").html('<b>SOURCE:</b> ' + chartmeta.title);
+          var textnote = d3.select(targetElement).append("div").html('<b>NOTE:</b> ' + chartmeta.subtitle);
 }
 
 //
