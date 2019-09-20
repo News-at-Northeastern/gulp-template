@@ -3,7 +3,7 @@ function barTemplate(data, targetElement) {
     var width = d3.select(targetElement).node().getBoundingClientRect().width;
     var height = width * 0.4;
 
-
+     margin = {top: 20, right: 20, bottom: 30, left: 80};
     var x = d3.scaleLinear()
         .domain([0, d3.max(data, function(d) {
             return d.positive + 100;
@@ -77,5 +77,25 @@ function barTemplate(data, targetElement) {
           d3.select(this).attr("fill", function() {
               return "#cc0000";
       });
+    });
+
+  svg.selectAll(".text")
+  .data(data)
+  .enter()
+  .append("text")
+  .attr("class", "label")
+  .attr("fill", "#e6e6e6")
+  .attr("x", function(d,i){
+      return x(d.positive) - 50;
+      // return i * (width/data.length);
+  })
+  .attr("y", function(d){
+       return y(d.candidate) + (y.bandwidth()/2 + 10);
+      // height - (d * 4);
+  })
+  // .attr("dy", ".75em")
+  .text(function(d){
+      return d.positive;
   });
+
 }
