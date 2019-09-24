@@ -28,7 +28,7 @@ d3.json('/interactive/2018/10/bubble/data/aggregated.json')
 
     barTemplate(data, "#bar");
 
-   groupedbarTemplate(data, "#groupedbar");
+   groupedBarTemplate(data, "#groupedbar");
 
 }).catch(function(error){
    // handle error

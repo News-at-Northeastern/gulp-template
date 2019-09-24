@@ -171,41 +171,79 @@ function groupedColumnTemplate(data, targetElement) {
        .enter()
        .append("text")
        .attr("class", "label")
+       .attr("fill", "#e6e6e6")
        .attr("x", function(d, i){
 
-           return i * (width/(data.length));
+           // return i * (width/(data.length));
+           return (xGrouping(d.candidate) + (xBar.bandwidth()/2)  ) + (xGrouping.bandwidth()/2);
        })
        .attr("y", function(d, i){
            // console.log(d);
-           return y(d.value);
+           return y(d.positive) + 30 ;
            // return height * i/12 ;
        })
        .text(function(d){
 
-           // var val = d3.entries(d).filter(function(dd) {
-           //     return dd.key == "negative" || dd.key == "positive" || dd.key == "percent_positive";
-           // });
+           return d.positive;
+
+           // // var val = d3.entries(d).filter(function(dd) {
+           // //     return dd.key == "negative" || dd.key == "positive" || dd.key == "percent_positive";
+           // // });
+           // //
+           // // console.log(val);
+           // // val.keys(d).map(function(key){
+           // //     return d[key];
+           // // });
+           // // console.log(val);
+           // var values = Object.keys(d).map(function(key){
            //
-           // console.log(val);
-           // val.keys(d).map(function(key){
-           //     return d[key];
+           //
+           //        return d[key];
+           //
+           //
            // });
-           // console.log(val);
-           var values = Object.keys(d).map(function(key){
+          })
+          .attr("text-anchor", "middle");
 
 
-                  return d[key];
+          svg.selectAll(".text")
+             .data(data)
+             .enter()
+             .append("text")
+             .attr("class", "label")
+             .attr("fill", "#e6e6e6")
+             .attr("x", function(d, i){
 
+                 // return i * (width/(data.length));
+                 return (xGrouping(d.candidate) - (xBar.bandwidth()/2)) + (xGrouping.bandwidth()/2);
+             })
+             .attr("y", function(d, i){
+                 // console.log(d);
+                 return y(d.negative) + 30 ;
+                 // return height * i/12 ;
+             })
+             .text(function(d){
 
-           });
-           // console.log(values);
-           // // console.log(d.value[key]);
-           // console.log(d.negative && d.positive);
-           // return d.candidate;
-           return "";
-            // console.log(d);
+                 return d.negative;
 
-          });
+                 // // var val = d3.entries(d).filter(function(dd) {
+                 // //     return dd.key == "negative" || dd.key == "positive" || dd.key == "percent_positive";
+                 // // });
+                 // //
+                 // // console.log(val);
+                 // // val.keys(d).map(function(key){
+                 // //     return d[key];
+                 // // });
+                 // // console.log(val);
+                 // var values = Object.keys(d).map(function(key){
+                 //
+                 //
+                 //        return d[key];
+                 //
+                 //
+                 // });
+                })
+                .attr("text-anchor", "middle");
         // .selectAll(".bar")
         // .data(data)
         // .join("g")
