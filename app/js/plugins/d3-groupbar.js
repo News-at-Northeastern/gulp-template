@@ -112,7 +112,7 @@ function groupedBarTemplate(data, targetElement) {
              d3.select(this).attr("fill", "#f08080");
          }
          else{
-             d3.select(this).attr("fill", "#c0c0c0")
+             d3.select(this).attr("fill", "#c0c0c0");
          }
 
      })
@@ -121,7 +121,7 @@ function groupedBarTemplate(data, targetElement) {
              d3.select(this).attr("fill", "#cc0000");
          }
          else{
-             d3.select(this).attr("fill", "#808080")
+             d3.select(this).attr("fill", "#808080");
          }
      });
      // var filtVal = d3.entries(d).filter(function(dd) {
