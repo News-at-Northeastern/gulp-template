@@ -25,6 +25,7 @@
     "run-sequence": "^2.2.1"
   },
   "dependencies": {
+    "@mapbox/maki": "^6.1.1",
     "csvtojson": "^2.0.8",
     "gulp-compress": "0.0.9",
     "gulp-concat": "^2.6.1",
