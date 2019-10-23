@@ -1,4 +1,3 @@
 function lineResponsiveTemplate(data, targetElement){
-
-
+    
 }

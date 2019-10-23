@@ -1386,8 +1386,7 @@ function groupedColumnTemplate(data, targetElement) {
 }
 
 function lineResponsiveTemplate(data, targetElement){
-
-
+    
 }
 
 function lineTemplate(data, targetElement){
