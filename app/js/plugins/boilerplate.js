@@ -20,9 +20,13 @@ d3.json('/interactive/2018/10/bubble/data/aggregated.json')
 
   columnTemplate(data, "#column");
 
+  columnResponsiveTemplate(data, "#columnresponsive");
+
   groupedColumnTemplate(data, "#groupedcolumn");
 
   lineTemplate(data, "#line");
+
+  lineResponsiveTemplate(data, "#lineresponsive");
 
   multiLineTemplate(data, "#multiline");
 

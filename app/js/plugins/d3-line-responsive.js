@@ -1,0 +1,4 @@
+function lineResponsiveTemplate(data, targetElement){
+
+
+}
