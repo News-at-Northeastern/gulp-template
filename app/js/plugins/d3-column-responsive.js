@@ -102,14 +102,6 @@ function columnResponsiveTemplate(data, targetElement){
                .attr("class", "label")
                .attr("fill", "#e6e6e6")
                .attr("font-size", "14px")
-               .attr("opacity", function(d){
-
-                   if(width <= 500 ){
-                       return 0;
-                   }
-
-
-               })
                .attr("x", function(d,i){
                    return x(d.candidate) + (x.bandwidth()/2 - 10);
                    // return i * (width/data.length);
@@ -127,7 +119,7 @@ function columnResponsiveTemplate(data, targetElement){
 
 
 
-        function resize(){
+        function resizeColumn(){
 
             width = d3.select(targetElement).node().getBoundingClientRect().width,
             width = width - margin.left - margin.right;
@@ -185,8 +177,8 @@ function columnResponsiveTemplate(data, targetElement){
                         // svg.select('.xAxis').selectAll("text").attr("y",10).call(wrap, x.bandwidth());
         }
 
-        resize();
-        d3.select(window).on('resize', resize);
+        resizeColumn();
+        d3.select(window).on('resize.one', resizeColumn);
 }
 
 // function wrap(text, width) {

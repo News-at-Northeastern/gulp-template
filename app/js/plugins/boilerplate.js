@@ -24,6 +24,8 @@ d3.json('/interactive/2018/10/bubble/data/aggregated.json')
 
   groupedColumnTemplate(data, "#groupedcolumn");
 
+  groupedResponsiveColumnTemplate(data, "#groupedcolumnResponsive")
+
   lineTemplate(data, "#line");
 
   lineResponsiveTemplate(data, "#lineresponsive");
@@ -33,6 +35,8 @@ d3.json('/interactive/2018/10/bubble/data/aggregated.json')
     barTemplate(data, "#bar");
 
    groupedBarTemplate(data, "#groupedbar");
+
+   groupedResponsiveBarTemplate(data, "#groupedbarResponsive");
 
    stackedColumnTemplate(data, "#stackedcolumn");
 
