@@ -1,4 +1,4 @@
-function columnResponsiveTemplate(data, targetElement){
+   function columnResponsiveTemplate(data, targetElement){
     var width = d3.select(targetElement).node().getBoundingClientRect().width;
         var height = width * 0.4,
          margin = {top: 20, right: 40, bottom: 30, left: 40};

@@ -34,6 +34,8 @@ d3.json('/interactive/2018/10/bubble/data/aggregated.json')
 
     barTemplate(data, "#bar");
 
+    barResponsiveTemplate(data, "#barresponsive")
+
    groupedBarTemplate(data, "#groupedbar");
 
    groupedResponsiveBarTemplate(data, "#groupedbarResponsive");

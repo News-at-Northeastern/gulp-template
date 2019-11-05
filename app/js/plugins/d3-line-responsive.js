@@ -142,7 +142,7 @@ function lineResponsiveTemplate(data, targetElement){
              .call(customYAxis);
 
          line
-           .x(function(d) { return x(d.candidate) })
+           .x(function(d) { return x(d.candidate) + 50})
            .y(function(d) { return y(d.positive) });
 
          // svg.append("path")
