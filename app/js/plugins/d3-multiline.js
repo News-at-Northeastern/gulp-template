@@ -210,6 +210,10 @@ function multiLineTemplate(data, targetElement) {
                     // tooltip.hide();
                   });;
 
+                  function resizeMultiLine(){
+
+                  }
+
 
 
 }

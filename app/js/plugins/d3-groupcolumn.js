@@ -3,10 +3,7 @@ function groupedColumnTemplate(data, targetElement) {
     var width = d3.select(targetElement).node().getBoundingClientRect().width;
     var height = width * 0.4;
 
-    // this is to ensure that charts with fewer variables have extra breathing space between groups, instead of comically wide data bars
-    // var groupPadScale = d3.scaleLinear()
-    //     .domain([7,2])
-    //     .range([0.2, 0.35]);
+
 
     // set the ranges
     var xGrouping = d3.scaleBand()
@@ -70,46 +67,18 @@ function groupedColumnTemplate(data, targetElement) {
             "translate(" + margin.left + "," + margin.top + ")");
 
     svg.append("g")
-        .attr("class", "xAxis")
-        .attr("transform", "translate(0," + height + ")")
-        .style("font-size", "14px")
-        // .call(d3.axisBottom(xGrouping));
-        .call(customXAxis);
+        .attr("class", "xAxis");
+        // .attr("transform", "translate(0," + height + ")")
+        // .style("font-size", "14px")
+        // // .call(d3.axisBottom(xGrouping));
+        // .call(customXAxis);
 
     svg.append("g")
         // .call(d3.axisLeft(y));
-        .attr("class", "yAxis")
-        .style("font-size", "12px")
-        .call(customYAxis);
+        .attr("class", "yAxis");
+        // .style("font-size", "12px")
+        // .call(customYAxis);
 
-
-    // legend
-    // svg.append("g")
-    //       .attr("class", "legendOrdinalGroup")
-    //       .attr("transform", "translate(" + ((width < 768) ? (width-225) : (width-350)) + ",0)");
-    //
-    // var legendOrdinalGroup = d3.legendColor()
-    //   .shapeWidth((width < 768) ? 50 : 90)
-    //   .shapeHeight(10)
-    //   .shapePadding(15)
-    //   .orient('horizontal')
-    //   .scale(countrycolors)
-    //   .labels(spellout.range())
-    //   .labelWrap((width < 768) ? 50 : 90);
-    //
-    // svg.select(".legendOrdinalGroup")
-    //   .call(legendOrdinalGroup);
-
-    // create tooltip using d3-tip library
-    // var tooltip = d3.tip()
-    //     .attr('class', 'd3-tip')
-    //     .offset([-10,0])
-    //     .html(function(d) {
-    //         return d.candidate + ": " + d.negative+ ", " + d.positive;
-    //       });
-    //
-    // svg.append('circle').attr('class', 'tiptarget');
-    // svg.call(tooltip);
 
 
     svg.append("g")
@@ -130,6 +99,7 @@ function groupedColumnTemplate(data, targetElement) {
                 return dd.key == "negative" || dd.key == "positive";
             });
         })
+        .attr("class", "bar")
         .enter().append("rect")
         .attr("width", xBar.bandwidth())
         .attr("height", function(d){
@@ -176,94 +146,57 @@ function groupedColumnTemplate(data, targetElement) {
            return i * (width/(data.length));
        })
        .attr("y", function(d, i){
-           // console.log(d);
            return y(d.value);
            // return height * i/12 ;
        })
        .text(function(d){
 
-           // var val = d3.entries(d).filter(function(dd) {
-           //     return dd.key == "negative" || dd.key == "positive" || dd.key == "percent_positive";
-           // });
-           //
-           // console.log(val);
-           // val.keys(d).map(function(key){
-           //     return d[key];
-           // });
-           // console.log(val);
            var values = Object.keys(d).map(function(key){
-
-
                   return d[key];
-
-
            });
-           // console.log(values);
-           // // console.log(d.value[key]);
-           // console.log(d.negative && d.positive);
-           // return d.candidate;
+
            return "";
-            // console.log(d);
+
 
           });
-        // .selectAll(".bar")
-        // .data(data)
-        // .join("g")
-        // .attr("transform", function(d) { return 'translate(' + xGrouping(d.candidate) + ',0)'; })
-        // .attr("class", function(d) {return d.candidate;})
-        // .on('mouseover, mousemove', function (d) {
-        //     var target = d3.select(targetElement + ' .tiptarget')
-        //         .attr('cx', d3.event.offsetX - 45)
-        //         .attr('cy', d3.event.offsetY - 45) // 5 pixels above the cursor
-        //         .node();
-        //     tooltip.show(d, target);
-        //
-        // })
-        // .on('mouseout', function(d){
-        //   tooltip.hide();
-        // })
-        // .on('mouseout', tooltip.hide)
-        // .selectAll("rect")
-        // .data(function(d) {
-        //     console.log(d3.entries(d).filter(function(dd) {
-        //         return dd.key == "negative" || dd.key == "positive";
-        //     }));
-        //     return d3.entries(d).filter(function(dd) {
-        //         return dd.key == "negative" || dd.key == "positive";
-        //     });
-        // })
-        // .join("rect")
-        // .attr("x", function(d) {
-        //     return xBar(d.key);
-        // })
-        // .attr("y", function(d) {
-        //     return y(d.value);
-        // })
-        // .attr("width", xBar.bandwidth())
-        // .attr("height", function(d) {
-        //     return y(0) - y(d.value);
-        // })
-        // .attr("fill",
-        //     function(d) {
-        //         return colorscale(d.key);
-        //     });
+
+          function resizeGroupColumn(){
+              console.log("resize group");
+              width = d3.select(targetElement).node().getBoundingClientRect().width,
+                  width = width - margin.left - margin.right;
+
+                  console.log(width);
+            xBar.range([0,width]);
+            y.range([height, 0]);
+
+            svg.select(".xAxis")
+            .attr("transform", "translate(0," + height + ")")
+            .style("font-size", "14px")
+            .call(customXAxis);
+
+            svg.selectAll(".yAxis")
+            .style("font-size", "12px")
+            .call(customYAxis);
+
+            svg.selectAll(".bar")
+            .attr("width", xBar.bandwidth())
+            .attr("height", function(d){
+                return y(0) - y(d.value);
+            })
+            .attr("x", function(d,i) {
+                return xBar(d.key);
+            })
+            .attr("y", function(d) {
+
+                return y(d.value);
+            })
+
+          }
+
+        resizeGroupColumn();
+         d3.select(window).on('resize.two', resizeGroupColumn);
 
 
-    // svg.selectAll(".text")
-    //    .data(data)
-    //    .enter()
-    //    .append("text")
-    //    .attr("class", "label")
-    //    .attr("fill", "#000")
-    //    .attr("x", function(d,i){
-    //      return xBar(d.candidate) + (xBar.bandwidth()/2 - 10);
-    //    })
-    //    .attr("y", function(d){
-    //      return y(d) + 25;
-    //    })
-    //    .text(function(d, i){
-    //      return d.negative + ":" + d.positive;
-    //    });
-    // axes
+
 
 }
