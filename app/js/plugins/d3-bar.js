@@ -111,6 +111,7 @@ function barTemplate(data, targetElement) {
           .call(customXAxis);
 
           svg.select(".yAxis")
+          .style("font-weight", "600")
           .style("font-size", "12px")
           // .attr("stroke-opacity", 0.5)
           // .attr("stroke-dasharray", "2,2")

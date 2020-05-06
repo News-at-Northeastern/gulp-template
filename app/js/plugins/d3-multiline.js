@@ -63,17 +63,17 @@ function multiLineTemplate(data, targetElement) {
             "translate(" + margin.left + "," + margin.top + ")");
 
     svg.append("g")
-        .attr("class", "xAxis")
-        .attr("transform", "translate(0," + height + ")")
-        .style("font-size", "14px")
-        // .call(d3.axisBottom(xGrouping));
-        .call(customXAxis);
+        .attr("class", "xAxis");
+        // .attr("transform", "translate(0," + height + ")")
+        // .style("font-size", "14px")
+        // // .call(d3.axisBottom(xGrouping));
+        // .call(customXAxis);
 
     svg.append("g")
         // .call(d3.axisLeft(y));
-        .attr("class", "yAxis")
-        .style("font-size", "12px")
-        .call(customYAxis);
+        .attr("class", "yAxis");
+        // .style("font-size", "12px")
+        // .call(customYAxis);
 
 
 
@@ -91,40 +91,17 @@ function multiLineTemplate(data, targetElement) {
 
       svg.append("path")
             .datum(data)
+            .attr("class", "line")
             .attr("fill", "none")
             .attr("stroke", "#cc0000")
             .attr("stroke-width", 2)
             .attr("d", line);
 
 
-        // svg.selectAll(".dot")
-        //     .data(data)
-        //     .enter().append("circle")
-        //     .attr("class", "dot")
-        //     .attr("cx", function(d,i){
-        //       return xGrouping(d.candidate) + 50;
-        //     })
-        //     .attr("cy", function(d,i){
-        //       return y(d.negative);
-        //     })
-        //     .attr("r", 3)
-        //     .attr("fill", "#808080");
-        //
-        // svg.selectAll(".dot2")
-        //     .data(data)
-        //     .enter().append("circle2")
-        //     .attr("class", "dot2")
-        //     .attr("cx", function(d,i){
-        //       return xGrouping(d.candidate) + 50;
-        //     })
-        //     .attr("cy", function(d,i){
-        //       return y(d.negative);
-        //     })
-        //     .attr("r", 3)
-        //     .attr("fill", "#cc0000");
 
     svg.append("path")
           .datum(data)
+          .attr("class", "line2")
           .attr("fill", "none")
           .attr("stroke", "#808080")
           .attr("stroke-width", 2)
@@ -140,7 +117,9 @@ function multiLineTemplate(data, targetElement) {
                      .attr("r", 3)
 
 
-           fixeddot.attr("cx", function (d) {
+           fixeddot
+           .attr("classs", "dot")
+           .attr("cx", function (d) {
                    return xGrouping(d.candidate) + 50;
                })
                .attr("cy", function (d) {
@@ -152,13 +131,7 @@ function multiLineTemplate(data, targetElement) {
                      .attr("fill", "#f08080")
                      .attr("r", 5);
 
-                   // var target = d3.select(targetElement + ' .tiptarget')
-                   // .attr('dx', d3.event.pageX + "px")
-                   // .attr('dy', d3.event.pageY + "px") // 5 pixels above the cursor
-                   // .node();
-                   // tooltip.show(d, target);
-                   //
-                   // console.log(d.candidate + ":" + d.positive);
+
 
                    div.transition().style("opacity", .7);
 
@@ -211,8 +184,61 @@ function multiLineTemplate(data, targetElement) {
                   });;
 
                   function resizeMultiLine(){
+                      // console.log("resize Multi Line");
+                      width = d3.select(targetElement).node().getBoundingClientRect().width,
+                          width = width - margin.left - margin.right;
+
+                          xGrouping.range([0, width]);
+                          y.range([height, 0]);
+                          // console.log(xBar);
+
+                          svg.select(".xAxis")
+                          .attr("transform", "translate(0," + height + ")")
+                          .style("font-size", "14px")
+                          // .call(d3.axisBottom(xGrouping));
+                          .call(customXAxis);
+
+                        svg.select(".yAxis")
+                        .style("font-size", "12px")
+                        .call(customYAxis);
+
+                        line
+                        .x(function(d) { return xGrouping(d.candidate) + 50})
+                        .y(function(d) { return y(d.positive) });
+
+
+
+                        svg.selectAll(".line")
+                           .attr("d", line);
+
+                           fixeddot
+                           // .attr("classs", "dot")
+                           .attr("cx", function (d) {
+                                   return xGrouping(d.candidate) + 50;
+                               })
+                               .attr("cy", function (d) {
+                                   return y(d.positive);
+                               })
+
+
+                        line2
+                        .x(function(d) { return xGrouping(d.candidate) + 50})
+                        .y(function(d) { return y(d.negative) });
+
+                        svg.selectAll(".line2")
+                           .attr("d", line2);
+
+                           fixeddot2.attr("cx", function (d) {
+                              return xGrouping(d.candidate) + 50;
+                          })
+                          .attr("cy", function (d) {
+                              return y(d.negative);
+                          })
 
                   }
+
+                  resizeMultiLine();
+                  d3.select(window).on('resize.four', resizeMultiLine);
 
 
 

@@ -147,6 +147,7 @@ function barTemplate(data, targetElement) {
           .call(customXAxis);
 
           svg.select(".yAxis")
+          .style("font-weight", "600")
           .style("font-size", "12px")
           // .attr("stroke-opacity", 0.5)
           // .attr("stroke-dasharray", "2,2")
@@ -455,215 +456,177 @@ function donutTemplate(data, targetElement) {
 }
 
 function groupedbarTemplate(data, targetElement) {
+
     var width = d3.select(targetElement).node().getBoundingClientRect().width;
-        var height = width * 0.4;
+    var height = width * 0.4;
 
-         margin = {top: 20, right: 20, bottom: 30, left: 80};
-
-
+     margin = {top: 20, right: 20, bottom: 30, left: 80};
 
 
-        var yGrouping = d3.scaleBand()
-            .domain(data.map(function(d) {
-                return d.candidate;
-            }))
-            .range([height, 0])
-            .padding(0.2);
 
-        var yBar = d3.scaleBand()
-            .domain(["negative", "positive"])
-            .rangeRound([0, yGrouping.bandwidth()])
-            .padding(0);
 
-            var x = d3.scaleLinear()
-                .domain([0, d3.max(data, function(d) {
-                    return d.positive ;
-                })])
-                .range([0, width - margin.left - margin.right])
-                .nice();
+    var yGrouping = d3.scaleBand()
+        .domain(data.map(function(d) {
+            return d.candidate;
+        }))
+        .range([height, 0])
+        .padding(0.2);
 
-        var xAxis = d3.axisBottom(x)
-            .tickSize(-height);
+    var yBar = d3.scaleBand()
+        .domain(["negative", "positive"])
+        .rangeRound([0, yGrouping.bandwidth()])
+        .padding(0);
 
-        var yAxis = d3.axisLeft(yGrouping)
-            // .ticks(7)
-            .tickFormat(function(d) {
-                return d;
-            })
-            .tickSize(0);
+        var x = d3.scaleLinear()
+            .domain([0, d3.max(data, function(d) {
+                return d.positive ;
+            })])
+            .range([0, width - margin.left - margin.right])
+            .nice();
 
-        var colorscale = d3.scaleOrdinal()
-            .domain(["negative", "positive"])
-            .range(colors.procon);
+    var xAxis = d3.axisBottom(x)
+        .tickSize(-height);
 
-        function customXAxis(g){
-            var s = g.selection ? g.selection() : g;
-            g.call(xAxis);
-            s.select(".domain").remove();
-            s.selectAll(".tick line").filter(Number).attr("stroke", "#777").attr("stroke-dasharray", "2,2");
-            // s.selectAll(".tick text").attr("x", 10).attr("dy", -4);
-        }
-
-        function customYAxis(g) {
-          g.call(yAxis);
-          g.select(".domain").remove();
-        }
-
+    var yAxis = d3.axisLeft(yGrouping)
         // .ticks(7)
-        // .tickSize(-width);
-        // create container SVG
-        var svg = d3.select(targetElement).append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform",
-                "translate(" + margin.left + "," + margin.top + ")");
+        .tickFormat(function(d) {
+            return d;
+        })
+        .tickSize(0);
+
+    var colorscale = d3.scaleOrdinal()
+        .domain(["negative", "positive"])
+        .range(colors.procon);
+
+    function customXAxis(g){
+        var s = g.selection ? g.selection() : g;
+        g.call(xAxis);
+        s.select(".domain").remove();
+        s.selectAll(".tick line").filter(Number).attr("stroke", "#777").attr("stroke-dasharray", "2,2");
+        // s.selectAll(".tick text").attr("x", 10).attr("dy", -4);
+    }
+
+    function customYAxis(g) {
+      g.call(yAxis);
+      g.select(".domain").remove();
+    }
+
+    // .ticks(7)
+    // .tickSize(-width);
+    // create container SVG
+    var svg = d3.select(targetElement).append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
 
 
-        svg.append("g")
-            .attr("class", "xAxis")
-            .attr("transform", "translate(0," + height + ")")
-            .style("font-size", "14px")
-            .call(customXAxis);
+    svg.append("g")
+        .attr("class", "xAxis");
+        // .attr("transform", "translate(0," + height + ")")
+        // .style("font-size", "14px")
+        // .call(customXAxis);
 
-        svg.append("g")
-            .attr("class", "yAxis")
-            .style("font-size", "12px")
-            .call(customYAxis);
+    svg.append("g")
+        .attr("class", "yAxis");
+        // .style("font-size", "12px")
+        // .call(customYAxis);
 
 
-      svg.append("g")
-         .selectAll("g")
-         .data(data)
-         .enter().append("g")
-         .attr("transform", function(d){
-             // return 'translate(' + yGrouping(d.candidate) + ',0)';
-             return 'translate(0,' + yGrouping(d.candidate) +')';
-         })
-         .selectAll("rect")
-         .data(function(d){
+  svg.append("g")
+     .selectAll("g")
+     .data(data)
+     .enter().append("g")
+     .attr("transform", function(d){
+         // return 'translate(' + yGrouping(d.candidate) + ',0)';
+         return 'translate(0,' + yGrouping(d.candidate) +')';
+     })
+     .selectAll("rect")
+     .data(function(d){
 
-             return d3.entries(d).filter(function(dd) {
-                 return dd.key == "negative" || dd.key == "positive";
-             });
-         })
-         .enter().append("rect")
-         .attr("width", function(d){
-             return x(d.value) - x(0);
-         })
-         .attr("height", yBar.bandwidth())
-         .attr("x", function(d,i){
-             return x;
-         })
-         .attr("y", function(d){
-             return yBar(d.key);
-         })
-         .attr("fill",
-             function(d) {
-                 return colorscale(d.key);
-             })
-         .on('mouseover, mousemove', function(d){
-             if(d.key == "negative"){
-                 d3.select(this).attr("fill", "#f08080");
-             }
-             else{
-                 d3.select(this).attr("fill", "#c0c0c0");
-             }
-
-         })
-         .on('mouseout', function(d,i){
-             if(d.key == "negative"){
-                 d3.select(this).attr("fill", "#cc0000");
-             }
-             else{
-                 d3.select(this).attr("fill", "#808080");
-             }
+         return d3.entries(d).filter(function(dd) {
+             return dd.key == "negative" || dd.key == "positive";
          });
-         // var filtVal = d3.entries(d).filter(function(dd) {
-         //     return dd.key == "negative" || dd.key == "positive";
-         // })
-      // svg.selectAll(".text")
-      //     .data(data.filter(function(d){
-      //         console.log(d3.entries(d).filter(function(dd) {
-      //             return dd.key == "negative" || dd.key == "positive";
-      //         }));
-      //
-      //         return d3.entries(d).filter(function(dd) {
-      //             return dd.key == "negative" || dd.key == "positive";
-      //         });
-      //     }))
-      //     .enter().append("text")
-      //     .attr("class", "label")
-      //      .attr("fill", "#000")
-      //     .attr("x", function(d, i){
-      //
-      //         // return i * (width/(data.length));
-      //         return x(d.positive);
-      //     })
-      //     .attr("y", function(d, i){
-      //         // console.log(d);
-      //         // return y(d.value);
-      //         return yGrouping(d.candidate) + (yBar.bandwidth());
-      //         // return height * i/12 ;
-      //     })
-      //     .text(function(d, i){
-      //
-      //         // console.log(d);
-      //         var field = d3.entries(d).filter(function(dd) {
-      //             return dd.key == "negative" || dd.key == "positive";
-      //         });
-      //         var values = Object.keys(field).map(function(key){
-      //
-      //
-      //           console.log(key = "negative");
-      //                return d[key];
-      //
-      //
-      //         });
-      //         console.log(values[0]);
-      //
-      //         // return d.positive + ":" + d.negative;
-      //         return values;
-      //     });
-      svg.selectAll(".text")
-      .data(data)
-      .enter()
-      .append("text")
-      .attr("class", "label")
-      .attr("fill", "#e6e6e6")
-      .attr("x", function(d,i){
-          return x(d.positive) - 50;
-          // return i * (width/data.length);
-      })
-      .attr("y", function(d){
-           // return (yGrouping(d.candidate) - yBar.bandwidth()/2)+ (yGrouping.bandwidth()) ;
-           return yGrouping(d.candidate) + (yGrouping.bandwidth()- 7);
-          // height - (d * 4);
-      })
-      // .attr("dy", ".75em")
-      .text(function(d){
-          return d.positive;
-      });
+     })
+     .enter().append("rect")
+     .attr("class", "bars")
+     .attr("width", function(d){
+         return x(d.value) - x(0);
+     })
+     .attr("height", yBar.bandwidth())
+     .attr("x", function(d,i){
+         return x(0);
+     })
+     .attr("y", function(d){
+         return yBar(d.key);
+     })
+     .attr("fill",
+         function(d) {
+             return colorscale(d.key);
+         })
+     .on('mouseover, mousemove', function(d){
+         if(d.key == "negative"){
+             d3.select(this).attr("fill", "#f08080");
+         }
+         else{
+             d3.select(this).attr("fill", "#c0c0c0");
+         }
 
-      svg.selectAll(".text")
-      .data(data)
-      .enter()
-      .append("text")
-      .attr("class", "label")
-      .attr("fill", "#e6e6e6")
-      .attr("x", function(d,i){
-          return x(d.negative) - 50;
-          // return i * (width/data.length);
-      })
-      .attr("y", function(d){
-        // return yGrouping(d.candidate) - (yGrouping.bandwidth() + 20);
-           return (yGrouping(d.candidate) - yBar.bandwidth() ) + (yGrouping.bandwidth() - 5 ) ;
-          // height - (d * 4);
-      })
-      // .attr("dy", ".75em")
-      .text(function(d){
-          return d.negative;
-      });
+     })
+     .on('mouseout', function(d,i){
+         if(d.key == "negative"){
+             d3.select(this).attr("fill", "#cc0000");
+         }
+         else{
+             d3.select(this).attr("fill", "#808080");
+         }
+     });
+
+
+
+
+  function resizeGroupBar(){
+
+                width = d3.select(targetElement).node().getBoundingClientRect().width,
+                width = width - margin.left - margin.right;
+
+                x.range([0, width]);
+                yBar.range([height, 0]);
+
+                svg.select(".xAxis")
+                   .attr("transform", "translate(0," +(height + 5) + ")")
+                    // .attr("transform", "translate("+ 0 + "," + (height + 5) + ")")
+                    .style("font-size", "14px")
+                    .call(customXAxis)
+                    .selectAll("text")
+                    .style("text-anchor", "end");
+                    // .attr("font-weight", "600");
+
+                    svg.select(".yAxis")
+                    .style("font-size", "12px")
+                    .style("font-weight", "600")
+                    // .attr("stroke-opacity", 0.5)
+                    // .attr("stroke-dasharray", "2,2")
+                    .call(customYAxis);
+
+                    svg.select(".xLabel")
+                    .style("font-size", "14px")
+                    .attr("font-weight", "600")
+                    .attr("transform",
+                          "translate(" + (width/2) + " ," +
+                                         (height + margin.top + 40) + ")")
+                    .style("text-anchor", "middle")
+                    .text("Daily Contact");
+
+                    svg.selectAll(".bars")
+                    .attr("width", function(d){
+                        return x(d.value) - x(0);
+                    });
+            }
+
+            resizeGroupBar();
+            d3.select(window).on('resize.six', resizeGroupBar);
 
 
 
@@ -757,6 +720,7 @@ function groupedColumnTemplate(data, targetElement) {
         .selectAll("g")
         .data(data)
         .enter().append("g")
+        .attr("class", "bar")
         .attr("transform", function(d){
             return 'translate(' + xGrouping(d.candidate) + ',0)';
         })
@@ -771,7 +735,7 @@ function groupedColumnTemplate(data, targetElement) {
                 return dd.key == "negative" || dd.key == "positive";
             });
         })
-        .attr("class", "bar")
+
         .enter().append("rect")
         .attr("width", xBar.bandwidth())
         .attr("height", function(d){
@@ -833,12 +797,13 @@ function groupedColumnTemplate(data, targetElement) {
           });
 
           function resizeGroupColumn(){
-              console.log("resize group");
+
               width = d3.select(targetElement).node().getBoundingClientRect().width,
                   width = width - margin.left - margin.right;
 
-                  console.log(width);
-            xBar.range([0,width]);
+                  // console.log(width);
+            xGrouping.range([0,width]);
+            // xBar.range([0, width]);
             y.range([height, 0]);
 
             svg.select(".xAxis")
@@ -851,6 +816,10 @@ function groupedColumnTemplate(data, targetElement) {
             .call(customYAxis);
 
             svg.selectAll(".bar")
+            .attr("transform", function(d){
+                return 'translate(' + xGrouping(d.candidate) + ',0)';
+            })
+            .selectAll("rect")
             .attr("width", xBar.bandwidth())
             .attr("height", function(d){
                 return y(0) - y(d.value);
@@ -861,7 +830,14 @@ function groupedColumnTemplate(data, targetElement) {
             .attr("y", function(d) {
 
                 return y(d.value);
-            })
+            });
+
+            // svg.selectAll("rect")
+            // .attr("width", xBar.bandwidth())
+            // .attr("x", function(d,i) {
+            //     return xBar(d.key);
+            // });
+
 
           }
 
@@ -1238,17 +1214,17 @@ function multiLineTemplate(data, targetElement) {
             "translate(" + margin.left + "," + margin.top + ")");
 
     svg.append("g")
-        .attr("class", "xAxis")
-        .attr("transform", "translate(0," + height + ")")
-        .style("font-size", "14px")
-        // .call(d3.axisBottom(xGrouping));
-        .call(customXAxis);
+        .attr("class", "xAxis");
+        // .attr("transform", "translate(0," + height + ")")
+        // .style("font-size", "14px")
+        // // .call(d3.axisBottom(xGrouping));
+        // .call(customXAxis);
 
     svg.append("g")
         // .call(d3.axisLeft(y));
-        .attr("class", "yAxis")
-        .style("font-size", "12px")
-        .call(customYAxis);
+        .attr("class", "yAxis");
+        // .style("font-size", "12px")
+        // .call(customYAxis);
 
 
 
@@ -1266,40 +1242,17 @@ function multiLineTemplate(data, targetElement) {
 
       svg.append("path")
             .datum(data)
+            .attr("class", "line")
             .attr("fill", "none")
             .attr("stroke", "#cc0000")
             .attr("stroke-width", 2)
             .attr("d", line);
 
 
-        // svg.selectAll(".dot")
-        //     .data(data)
-        //     .enter().append("circle")
-        //     .attr("class", "dot")
-        //     .attr("cx", function(d,i){
-        //       return xGrouping(d.candidate) + 50;
-        //     })
-        //     .attr("cy", function(d,i){
-        //       return y(d.negative);
-        //     })
-        //     .attr("r", 3)
-        //     .attr("fill", "#808080");
-        //
-        // svg.selectAll(".dot2")
-        //     .data(data)
-        //     .enter().append("circle2")
-        //     .attr("class", "dot2")
-        //     .attr("cx", function(d,i){
-        //       return xGrouping(d.candidate) + 50;
-        //     })
-        //     .attr("cy", function(d,i){
-        //       return y(d.negative);
-        //     })
-        //     .attr("r", 3)
-        //     .attr("fill", "#cc0000");
 
     svg.append("path")
           .datum(data)
+          .attr("class", "line2")
           .attr("fill", "none")
           .attr("stroke", "#808080")
           .attr("stroke-width", 2)
@@ -1315,7 +1268,9 @@ function multiLineTemplate(data, targetElement) {
                      .attr("r", 3)
 
 
-           fixeddot.attr("cx", function (d) {
+           fixeddot
+           .attr("classs", "dot")
+           .attr("cx", function (d) {
                    return xGrouping(d.candidate) + 50;
                })
                .attr("cy", function (d) {
@@ -1327,13 +1282,7 @@ function multiLineTemplate(data, targetElement) {
                      .attr("fill", "#f08080")
                      .attr("r", 5);
 
-                   // var target = d3.select(targetElement + ' .tiptarget')
-                   // .attr('dx', d3.event.pageX + "px")
-                   // .attr('dy', d3.event.pageY + "px") // 5 pixels above the cursor
-                   // .node();
-                   // tooltip.show(d, target);
-                   //
-                   // console.log(d.candidate + ":" + d.positive);
+
 
                    div.transition().style("opacity", .7);
 
@@ -1386,8 +1335,61 @@ function multiLineTemplate(data, targetElement) {
                   });;
 
                   function resizeMultiLine(){
+                      // console.log("resize Multi Line");
+                      width = d3.select(targetElement).node().getBoundingClientRect().width,
+                          width = width - margin.left - margin.right;
+
+                          xGrouping.range([0, width]);
+                          y.range([height, 0]);
+                          // console.log(xBar);
+
+                          svg.select(".xAxis")
+                          .attr("transform", "translate(0," + height + ")")
+                          .style("font-size", "14px")
+                          // .call(d3.axisBottom(xGrouping));
+                          .call(customXAxis);
+
+                        svg.select(".yAxis")
+                        .style("font-size", "12px")
+                        .call(customYAxis);
+
+                        line
+                        .x(function(d) { return xGrouping(d.candidate) + 50})
+                        .y(function(d) { return y(d.positive) });
+
+
+
+                        svg.selectAll(".line")
+                           .attr("d", line);
+
+                           fixeddot
+                           // .attr("classs", "dot")
+                           .attr("cx", function (d) {
+                                   return xGrouping(d.candidate) + 50;
+                               })
+                               .attr("cy", function (d) {
+                                   return y(d.positive);
+                               })
+
+
+                        line2
+                        .x(function(d) { return xGrouping(d.candidate) + 50})
+                        .y(function(d) { return y(d.negative) });
+
+                        svg.selectAll(".line2")
+                           .attr("d", line2);
+
+                           fixeddot2.attr("cx", function (d) {
+                              return xGrouping(d.candidate) + 50;
+                          })
+                          .attr("cy", function (d) {
+                              return y(d.negative);
+                          })
 
                   }
+
+                  resizeMultiLine();
+                  d3.select(window).on('resize.four', resizeMultiLine);
 
 
 

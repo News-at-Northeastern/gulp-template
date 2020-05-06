@@ -85,6 +85,7 @@ function groupedColumnTemplate(data, targetElement) {
         .selectAll("g")
         .data(data)
         .enter().append("g")
+        .attr("class", "bar")
         .attr("transform", function(d){
             return 'translate(' + xGrouping(d.candidate) + ',0)';
         })
@@ -99,7 +100,7 @@ function groupedColumnTemplate(data, targetElement) {
                 return dd.key == "negative" || dd.key == "positive";
             });
         })
-        .attr("class", "bar")
+
         .enter().append("rect")
         .attr("width", xBar.bandwidth())
         .attr("height", function(d){
@@ -161,12 +162,13 @@ function groupedColumnTemplate(data, targetElement) {
           });
 
           function resizeGroupColumn(){
-              console.log("resize group");
+
               width = d3.select(targetElement).node().getBoundingClientRect().width,
                   width = width - margin.left - margin.right;
 
-                  console.log(width);
-            xBar.range([0,width]);
+                  // console.log(width);
+            xGrouping.range([0,width]);
+            // xBar.range([0, width]);
             y.range([height, 0]);
 
             svg.select(".xAxis")
@@ -179,6 +181,10 @@ function groupedColumnTemplate(data, targetElement) {
             .call(customYAxis);
 
             svg.selectAll(".bar")
+            .attr("transform", function(d){
+                return 'translate(' + xGrouping(d.candidate) + ',0)';
+            })
+            .selectAll("rect")
             .attr("width", xBar.bandwidth())
             .attr("height", function(d){
                 return y(0) - y(d.value);
@@ -189,7 +195,14 @@ function groupedColumnTemplate(data, targetElement) {
             .attr("y", function(d) {
 
                 return y(d.value);
-            })
+            });
+
+            // svg.selectAll("rect")
+            // .attr("width", xBar.bandwidth())
+            // .attr("x", function(d,i) {
+            //     return xBar(d.key);
+            // });
+
 
           }
 
