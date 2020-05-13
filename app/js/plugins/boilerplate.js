@@ -18,17 +18,9 @@ var colors = {
 d3.json('/interactive/2018/10/bubble/data/aggregated.json')
   .then(function(data) {
 
-  columnTemplate(data, "#column");
+      waffleChart(data, ".waffle");
 
-  groupedColumnTemplate(data, "#groupedcolumn");
 
-  lineTemplate(data, "#line");
-  //
-  multiLineTemplate(data, "#multiline");
-  //
-    barTemplate(data, "#bar");
-  //
-   groupedbarTemplate(data, "#groupedbar");
 
 }).catch(function(error){
    // handle error

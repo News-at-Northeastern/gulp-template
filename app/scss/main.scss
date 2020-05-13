@@ -62,3 +62,18 @@ div.tooltip {
        margin: 0;
        padding: 0;
    }
+
+   .waffle {
+     display: flex;
+     flex-wrap: wrap;
+     width: 100%;
+     margin: 0;
+     /* margin: 0 50px; */
+     /* padding: 50px; */
+   }
+
+   .block {
+     width: 20px;
+     height: 20px;
+     margin: 2px;
+   }

@@ -22,7 +22,9 @@
     "gulp-strip-comments": "^2.5.2",
     "gulp-uglify": "^3.0.0",
     "gulp-useref": "^3.1.4",
-    "run-sequence": "^2.2.1"
+    "in": "^0.17.0",
+    "run-sequence": "^2.2.1",
+    "terminal": "^0.1.4"
   },
   "dependencies": {
     "csvtojson": "^2.0.8",
